@@ -1,0 +1,9 @@
+server:
+  session-timeout: 1800
+  port: 8010
+spring:
+  thymeleaf:
+    mode: HTML
+    cache: false
+  profiles:
+    active: dev

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.zhongwang</groupId>
+    <artifactId>empl-product</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <!-- 父模块打包类型必须为pom -->
+    <packaging>pom</packaging>
+
+    <!-- 父模块包含对应的子模块信息 -->
+    <modules>
+        <module>empl-product-support</module>
+        <module>empl-product-cache</module>
+        <module>empl-product-webapp</module>
+        <module>empl-product-webapi</module>
+        <module>empl-product-weixin</module>
+    </modules>
+
+    <name>empl-product</name>
+    <description>zhongwang Equipment management system</description>
+
+    <!-- parent指明继承关系，给出被继承的父项目的具体信息 -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.1.7.RELEASE</version>
+        <relativePath/>
+        <!-- lookup parent from repository -->
+    </parent>
+
+    <!-- 在properties标签中，添加各依赖包的版本号，然后在dependency中直接引用该依赖版本号的值即可 -->
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
+
+        <!-- 在properties中统一控制依赖包的版本，更清晰-->
+        <dubbo.version>2.5.3</dubbo.version>
+        <zkclient.version>0.10</zkclient.version>
+    </properties>
+
+    <!-- dependencyManagement用于管理依赖版本号 -->
+    <dependencyManagement>
+        <dependencies>
+            <!-- 删除spring-boot-starter和spring-boot-starter-test，因为parent中继承的祖先中已经有了，并且一般dependencyManagement管理的依赖都要写版本号 -->
+            <!--
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter</artifactId>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-test</artifactId>
+                <scope>test</scope>
+            </dependency>
+            -->
+
+            <!--新增后续dubbo项目中所需依赖，dubbo、zk-->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>dubbo</artifactId>
+                <!--<version>2.5.3</version>-->    <!--使用properties中配置的版本号-->
+                <version>${dubbo.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>com.101tec</groupId>
+                <artifactId>zkclient</artifactId>
+                <!--<version>0.10</version>-->    <!--使用properties中配置的版本号-->
+                <version>${zkclient.version}</version>
+            </dependency>
+
+            <!--子版本依赖-->
+            <dependency>
+                <groupId>com.zhongwang</groupId>
+                <artifactId>empl-product</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.zhongwang</groupId>
+                <artifactId>empl-product-cache</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.zhongwang</groupId>
+                <artifactId>empl-product-webapp</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.zhongwang</groupId>
+                <artifactId>empl-product-webapi</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.zhongwang</groupId>
+                <artifactId>empl-product-weixin</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
+    <!--该插件作用是打一个可运行的包，必须要写在需要打包的项目里。这里的父模块不需要打包运行，所以删掉该插件。-->
+    <!--
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+    -->
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.19.1</version>
+                <configuration>
+                <skipTests>true</skipTests>
+            </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
